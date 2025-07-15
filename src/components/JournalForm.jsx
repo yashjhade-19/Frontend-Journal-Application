@@ -3,32 +3,35 @@ import { journalAPI } from '../services/api';
 import './JournalForm.css';
 
 const JournalForm = ({ journalId, onSuccess }) => {
+  const isEditMode = journalId && journalId !== 'new';
+
   const [formData, setFormData] = useState({
     title: '',
     content: '',
     sentiment: 'HAPPY'
   });
+
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Load journal if in edit mode
+  // Load journal data for editing
   useEffect(() => {
-    if (journalId) {
-      const loadJournal = async () => {
+    if (isEditMode) {
+      const fetchJournal = async () => {
         try {
-          const journal = await journalAPI.getById(journalId);
+          const data = await journalAPI.getById(journalId);
           setFormData({
-            title: journal.title,
-            content: journal.content,
-            sentiment: journal.sentiment
+            title: data.title || '',
+            content: data.content || '',
+            sentiment: data.sentiment || 'HAPPY'
           });
-        } catch (error) {
-          setError('Failed to load journal');
+        } catch (err) {
+          setError('Failed to load journal data.');
         }
       };
-      loadJournal();
+      fetchJournal();
     }
-  }, [journalId]);
+  }, [journalId, isEditMode]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,15 +43,15 @@ const JournalForm = ({ journalId, onSuccess }) => {
         throw new Error('Title and content are required');
       }
 
-      if (journalId) {
+      if (isEditMode) {
         await journalAPI.update(journalId, formData);
       } else {
         await journalAPI.create(formData);
       }
-      
-      onSuccess();
-    } catch (error) {
-      setError(error.response?.data?.message || error.message);
+
+      if (typeof onSuccess === 'function') onSuccess();
+    } catch (err) {
+      setError(err.response?.data?.message || err.message);
     } finally {
       setIsSubmitting(false);
     }
@@ -56,8 +59,8 @@ const JournalForm = ({ journalId, onSuccess }) => {
 
   return (
     <div className="journal-form">
-      <h2>{journalId ? 'Edit Journal' : 'New Journal'}</h2>
-      
+      <h2>{isEditMode ? 'Edit Journal' : 'New Journal'}</h2>
+
       {error && <div className="error-message">{error}</div>}
 
       <form onSubmit={handleSubmit}>
@@ -66,7 +69,9 @@ const JournalForm = ({ journalId, onSuccess }) => {
           <input
             type="text"
             value={formData.title}
-            onChange={(e) => setFormData({...formData, title: e.target.value})}
+            onChange={(e) =>
+              setFormData({ ...formData, title: e.target.value })
+            }
             required
           />
         </div>
@@ -75,7 +80,9 @@ const JournalForm = ({ journalId, onSuccess }) => {
           <label>Content *</label>
           <textarea
             value={formData.content}
-            onChange={(e) => setFormData({...formData, content: e.target.value})}
+            onChange={(e) =>
+              setFormData({ ...formData, content: e.target.value })
+            }
             required
           />
         </div>
@@ -84,17 +91,19 @@ const JournalForm = ({ journalId, onSuccess }) => {
           <label>Mood</label>
           <select
             value={formData.sentiment}
-            onChange={(e) => setFormData({...formData, sentiment: e.target.value})}
+            onChange={(e) =>
+              setFormData({ ...formData, sentiment: e.target.value })
+            }
           >
-            <option value="HAPPY">Happy</option>
-            <option value="SAD">Sad</option>
-            <option value="ANGRY">Angry</option>
-            <option value="ANXIOUS">Anxious</option>
+            <option value="HAPPY">Happy 😊</option>
+            <option value="SAD">Sad 😢</option>
+            <option value="ANGRY">Angry 😠</option>
+            <option value="ANXIOUS">Anxious 😰</option>
           </select>
         </div>
 
         <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Saving...' : 'Save Journal'}
+          {isSubmitting ? 'Saving...' : isEditMode ? 'Update Journal' : 'Create Journal'}
         </button>
       </form>
     </div>

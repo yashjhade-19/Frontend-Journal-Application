@@ -26,6 +26,7 @@ const JournalList = () => {
   }, []);
 
   const handleDelete = async (id) => {
+    if (!id) return;
     if (window.confirm('Are you sure you want to delete this journal?')) {
       try {
         await journalAPI.delete(id);
@@ -41,23 +42,19 @@ const JournalList = () => {
     fetchJournals();
   };
 
-  if (loading) return <div className="loading">Loading journals...</div>;
-  if (error) return <div className="error">{error}</div>;
-
   return (
     <div className="journal-list">
-      {editingId ? (
-        <JournalForm 
-          journalId={editingId} 
-          onSuccess={handleSuccess} 
-        />
-      ) : (
+      {editingId === null && (
         <button 
           className="add-new"
           onClick={() => setEditingId('new')}
         >
           + Add New Journal
         </button>
+      )}
+
+      {editingId === 'new' && (
+        <JournalForm journalId={null} onSuccess={handleSuccess} />
       )}
 
       {journals.map(journal => (
@@ -105,7 +102,6 @@ const JournalList = () => {
   );
 };
 
-// Helper function
 function getSentimentEmoji(sentiment) {
   const emojis = {
     HAPPY: '😊',
