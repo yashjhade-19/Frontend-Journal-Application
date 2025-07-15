@@ -1,0 +1,75 @@
+.settings-panel {
+  padding: 30px;
+}
+
+.settings-title {
+  font-size: 24px;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.settings-notice {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
+.admin-form-section {
+  margin-bottom: 40px;
+}
+
+.section-title {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #444;
+}
+
+.admin-form {
+  display: grid;
+  gap: 20px;
+  max-width: 500px;
+}
+
+.form-message {
+  padding: 10px;
+  background: #e8f5e9;
+  border-radius: 4px;
+  color: #2e7d32;
+  font-size: 14px;
+}
+
+.users-section {
+  margin-top: 30px;
+}
+
+.users-table-container {
+  overflow-x: auto;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.users-table th,
+.users-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.users-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+
+.users-table tr:hover {
+  background-color: #f8f9fa;
+}
+
+.loading-text {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}

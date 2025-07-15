@@ -1,0 +1,91 @@
+.journal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.add-new {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  align-self: flex-start;
+}
+
+.journal-card {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.journal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.journal-header h3 {
+  margin: 0;
+  color: #333;
+}
+
+.sentiment {
+  font-size: 24px;
+}
+
+.sentiment.happy { color: #4caf50; }
+.sentiment.sad { color: #2196f3; }
+.sentiment.angry { color: #f44336; }
+.sentiment.anxious { color: #ff9800; }
+
+.journal-content {
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.journal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+  font-size: 14px;
+  color: #777;
+}
+
+.journal-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-edit {
+  color: #2196f3;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-delete {
+  color: #f44336;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
+.error {
+  color: #f44336;
+  padding: 20px;
+  text-align: center;
+}
