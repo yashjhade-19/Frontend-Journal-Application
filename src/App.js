@@ -1,15 +1,15 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
-import SignupPage from './pages/SignupPage';
 import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
+import SignupPage from './pages/SignupPage';
 
 const PrivateRoute = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuth();
   
   if (isLoading) {
-    return <div className="loading-screen">Loading...</div>;
+    return <div className="loading">Loading...</div>;
   }
   
   return isAuthenticated ? children : <Navigate to="/login" replace />;
@@ -20,8 +20,8 @@ function App() {
     <AuthProvider>
       <Router>
         <Routes>
-          <Route path="/signup" element={<SignupPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
           <Route
             path="/"
             element={

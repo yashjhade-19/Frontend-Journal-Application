@@ -6,31 +6,44 @@ const WeatherWidget = () => {
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [location, setLocation] = useState('Mumbai');
+
+  const fetchWeather = async (city = 'Mumbai') => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await getWeather(city);
+
+      if (response.data && response.data.current) {
+        setWeather({
+          location: city,
+          feelslike: response.data.current.feelslike
+        });
+      } else {
+        throw new Error('Invalid weather data structure');
+      }
+    } catch (err) {
+      console.error('Weather API error:', err);
+      setError('Failed to load weather data');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchWeather = async () => {
-      try {
-        setLoading(true);
-        const response = await getWeather();
-        
-        // Validate response structure
-        if (response.data && response.data.location && response.data.current) {
-          setWeather(response.data);
-        } else {
-          throw new Error('Invalid weather data structure');
-        }
-      } catch (err) {
-        console.error('Weather API error:', err);
-        setError(err.message || 'Failed to load weather data');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchWeather();
   }, []);
 
-  // Render loading state
+  const handleLocationChange = (e) => {
+    setLocation(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    fetchWeather(location);
+  };
+
   if (loading) {
     return (
       <div className="weather-widget loading">
@@ -39,36 +52,36 @@ const WeatherWidget = () => {
     );
   }
 
-  // Render error state
   if (error) {
     return (
       <div className="weather-widget error">
         <div className="weather-error">{error}</div>
+        <button onClick={() => fetchWeather()} className="retry-button">
+          Try Again
+        </button>
       </div>
     );
   }
 
-  // Render weather data
   return (
     <div className="weather-widget">
-      {weather?.current?.weather_icons?.[0] && (
-        <img 
-          src={weather.current.weather_icons[0]} 
-          alt="Weather icon" 
-          className="weather-icon"
+      <form onSubmit={handleSubmit} className="weather-form">
+        <input
+          type="text"
+          value={location}
+          onChange={handleLocationChange}
+          placeholder="Enter city"
+          className="location-input"
         />
-      )}
+        <button type="submit" className="get-weather-button">
+          Get Weather
+        </button>
+      </form>
+
       <div className="weather-info">
-        <div className="weather-location">
-          {weather?.location?.name || 'Location unavailable'}
-        </div>
+        <div className="weather-location">{location}</div>
         <div className="weather-temp">
-          {weather?.current?.temperature 
-            ? `${weather.current.temperature}°C` 
-            : 'Temperature unavailable'}
-          {weather?.current?.weather_descriptions?.[0] && (
-            <span>, {weather.current.weather_descriptions[0]}</span>
-          )}
+          Feels like: {weather?.feelslike || 'N/A'}°C
         </div>
       </div>
     </div>

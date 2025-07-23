@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { login, googleLogin } from '../services/api';
+import { login, googleLogin, getGoogleAuthUrl } from '../services/api';
 import './LoginPage.css';
-
 
 const LoginPage = () => {
   const [credentials, setCredentials] = useState({ 
@@ -11,33 +10,63 @@ const LoginPage = () => {
     password: '' 
   });
   const [error, setError] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false); // Add loading state
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const { login: authLogin } = useAuth();
 
+ // Handle Google OAuth callback
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
-    
+    const oauthError = urlParams.get('error');
+
+    if (oauthError) {
+      setError('Google login was cancelled or denied.');
+      return;
+    }
+
     if (code) {
       const handleGoogleAuth = async () => {
         try {
           setIsSubmitting(true);
           const response = await googleLogin(code);
-          if (response.data.token) {
-            authLogin(response.data.token, response.data.user);
-            navigate('/');
+          
+          // Debugging log
+          console.log('Google login response:', response.data);
+          
+          // Ensure consistent structure
+          const token = response.data.token;
+          const user = response.data.user;
+          
+          if (token && user) {
+            // Store token and user data
+            localStorage.setItem('journalToken', token);
+            localStorage.setItem('journalUser', JSON.stringify(user));
+            
+            // Update auth context
+            authLogin(token, user);
+            
+            // Navigate to home - IMPORTANT: use replace to prevent going back to login
+            navigate('/', { replace: true });
+          } else {
+            setError('Google authentication failed: Missing token or user data');
           }
+          
+          // Clean the URL after successful login
+          window.history.replaceState({}, document.title, window.location.pathname);
         } catch (err) {
-          setError('Google authentication failed');
+          setError('Google authentication failed. Please try again.');
+          console.error('Google login error:', err);
         } finally {
           setIsSubmitting(false);
         }
       };
+      
       handleGoogleAuth();
     }
   }, [authLogin, navigate]);
 
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setCredentials(prev => ({ ...prev, [name]: value }));
@@ -49,27 +78,45 @@ const LoginPage = () => {
     setIsSubmitting(true);
     
     try {
-      console.log("Attempting login with:", credentials);
       const response = await login(credentials);
-      console.log("Login response:", response);
       
-      if (response.data.token) {
-        authLogin(response.data.token, response.data.user);
-        navigate('/');
+      // Handle transformed response
+      const token = response.data.token;
+      const user = response.data.user;
+      
+      if (token) {
+        // Store token and user data
+        localStorage.setItem('journalToken', token);
+        localStorage.setItem('journalUser', JSON.stringify(user));
+        
+        // Update auth context
+        authLogin(token, user);
+        
+        // Navigate to home
+        navigate('/', { replace: true });
       } else {
         setError('Login failed: No token received');
       }
     } catch (err) {
-      console.error("Login error:", err);
       setError(err.response?.data?.message || 'Login failed. Please try again.');
+      console.error("Login error:", err);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleGoogleLogin = () => {
-    console.log("Initiating Google login");
-    window.location.href = 'https://journal-application-production.up.railway.app/oauth2/authorization/google';
+  // ... existing JSX ...
+
+
+  const handleGoogleLogin = async () => {
+    try {
+      setIsSubmitting(true);
+      const authUrl = await getGoogleAuthUrl();
+      window.location.href = authUrl;
+    } catch (err) {
+      setError('Failed to start Google login');
+      setIsSubmitting(false);
+    }
   };
 
   return (

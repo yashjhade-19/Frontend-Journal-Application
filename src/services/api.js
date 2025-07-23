@@ -43,30 +43,45 @@ export const signup = async (userData) => {
   return response;
 };
 
+
+// Update regular login to match Google's response format
 export const login = async (credentials) => {
   const response = await api.post('/public/login', credentials);
-
-  // if API returns token as plain string
+  
+  // Transform response to match Google's format
   if (typeof response.data === 'string') {
     return {
       ...response,
       data: {
         token: response.data,
-        user: { userName: credentials.userName },
-      },
+        user: { 
+          email: credentials.userName, // Added email field
+          userName: credentials.userName 
+        }
+      }
     };
   }
-
+  
   return response;
 };
 
+
+// In api.js, update getGoogleAuthUrl
+// Update Google URL endpoint
+export const getGoogleAuthUrl = async () => {
+  const response = await api.get('/auth/google/url');
+  return response.data; // Now returns a simple string
+};
+
+// Update Google login to handle consistent response
 export const googleLogin = async (code) => {
   const response = await api.get(`/auth/google/callback?code=${code}`);
   return response;
 };
 
-// ──────────────── JOURNALS ────────────────
+// ... existing imports and axios setup ...
 
+// ──────────────── JOURNALS ────────────────
 export const journalAPI = {
   create: async (journalData) => {
     try {
@@ -77,27 +92,35 @@ export const journalAPI = {
       });
       return response.data;
     } catch (error) {
-      console.error('[Journal] Create error:', {
-        status: error.response?.status,
-        data: error.response?.data,
-        payload: journalData,
-      });
+      console.error('[Journal] Create error:', error.response?.data || error.message);
       throw error;
     }
   },
 
   getAll: async () => {
-    const response = await api.get('/journal');
-    return response.data;
+    try {
+      const response = await api.get('/journal');
+      return response.data;
+    } catch (error) {
+      console.error('[Journal] Get All error:', error.response?.data || error.message);
+      throw error;
+    }
   },
 
   getById: async (id) => {
-    const response = await api.get(`/journal/id/${id}`);
-    return response.data;
+    try {
+      // Simplified ID handling - just pass string directly
+      const response = await api.get(`/journal/id/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error('[Journal] Get By ID error:', error.response?.data || error.message);
+      throw error;
+    }
   },
 
   update: async (id, journalData) => {
     try {
+      // No need for encoding or conversion
       const response = await api.put(`/journal/id/${id}`, {
         title: journalData.title,
         content: journalData.content,
@@ -108,7 +131,8 @@ export const journalAPI = {
       console.error('[Journal] Update error:', {
         id,
         status: error.response?.status,
-        payload: journalData,
+        data: error.response?.data,
+        message: error.message,
       });
       throw error;
     }
@@ -116,28 +140,28 @@ export const journalAPI = {
 
   delete: async (id) => {
     try {
+      // Direct string ID usage
       const response = await api.delete(`/journal/id/${id}`);
       return response.data;
     } catch (error) {
       console.error('[Journal] Delete error:', {
         id,
         status: error.response?.status,
+        data: error.response?.data,
+        message: error.message,
       });
       throw error;
     }
   },
 };
 
-// ──────────────── WEATHER (3rd party) ────────────────
+// ──────────────── WEATHER (Using our backend) ────────────────
 
-export const getWeather = async (location = 'New York') => {
-  const response = await axios.get(
-    `http://api.weatherstack.com/current?access_key=a382a134505756d5f45912ae8e4e3f22&query=${location}`,
-    { timeout: 10000 }
-  );
+export const getWeather = async (location = 'Mumbai') => {
+  // Use our backend endpoint instead of direct Weatherstack API
+  const response = await api.get(`/api/weather/${encodeURIComponent(location)}`);
   return response;
 };
-
 // ──────────────── ADMIN ────────────────
 
 export const createAdmin = async (adminData, token) => {

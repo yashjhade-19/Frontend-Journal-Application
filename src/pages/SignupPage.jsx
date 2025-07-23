@@ -85,7 +85,7 @@ const SignupPage = () => {
             />
           </div>
           
-          <div className="form-group form-checkbox">
+          <div className="form-group-checkbox">
             <input
               id="sentimentAnalysis"
               name="sentimentAnalysis"

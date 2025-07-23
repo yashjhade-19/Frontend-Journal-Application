@@ -7,15 +7,17 @@ const JournalList = () => {
   const [journals, setJournals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [editingId, setEditingId] = useState(null);
+  const [editingJournal, setEditingJournal] = useState(null);
 
   const fetchJournals = async () => {
     try {
       setLoading(true);
+      setError('');
       const data = await journalAPI.getAll();
       setJournals(data);
-    } catch (error) {
-      setError('Failed to load journals');
+    } catch (err) {
+      setError('Failed to load journals. Please try again later.');
+      console.error('Journal fetch error:', err);
     } finally {
       setLoading(false);
     }
@@ -27,77 +29,100 @@ const JournalList = () => {
 
   const handleDelete = async (id) => {
     if (!id) return;
-    if (window.confirm('Are you sure you want to delete this journal?')) {
+    
+    if (window.confirm('Are you sure you want to delete this journal entry?')) {
       try {
         await journalAPI.delete(id);
-        setJournals(journals.filter(j => j._id !== id));
-      } catch (error) {
-        setError('Failed to delete journal');
+        fetchJournals();
+      } catch (err) {
+        const errorMessage = err.response?.data?.message || 
+                            'Failed to delete journal. Please try again.';
+        setError(errorMessage);
+        console.error('Delete error:', err);
       }
     }
   };
 
-  const handleSuccess = () => {
-    setEditingId(null);
+  const handleFormSuccess = () => {
+    setEditingJournal(null);
     fetchJournals();
   };
 
   return (
     <div className="journal-list">
-      {editingId === null && (
-        <button 
-          className="add-new"
-          onClick={() => setEditingId('new')}
-        >
-          + Add New Journal
-        </button>
+      <div className="header-actions">
+        <h1>My Journal Entries</h1>
+        {!editingJournal && (
+          <button 
+            className="add-new"
+            onClick={() => setEditingJournal({ id: 'new' })}
+          >
+            + Add New Entry
+          </button>
+        )}
+      </div>
+
+      {editingJournal && (
+        <JournalForm
+          journal={editingJournal}
+          onSuccess={handleFormSuccess}
+          onCancel={() => setEditingJournal(null)}
+        />
       )}
 
-      {editingId === 'new' && (
-        <JournalForm journalId={null} onSuccess={handleSuccess} />
+      {loading && !editingJournal && (
+        <div className="loading-state">
+          <p>Loading journal entries...</p>
+        </div>
       )}
 
-      {journals.map(journal => (
-        <div key={journal._id} className="journal-card">
-          {editingId === journal._id ? (
-            <JournalForm 
-              journalId={journal._id} 
-              onSuccess={handleSuccess} 
-            />
+      {error && !loading && !editingJournal && (
+        <div className="error-state">
+          <p>{error}</p>
+          <button onClick={fetchJournals}>Retry</button>
+        </div>
+      )}
+
+      {!loading && !error && !editingJournal && (
+        <div className="journals-container">
+          {journals.length === 0 ? (
+            <div className="empty-state">
+              <p>No journal entries found.</p>
+            </div>
           ) : (
-            <>
-              <div className="journal-header">
-                <h3>{journal.title}</h3>
-                <span className={`sentiment ${journal.sentiment}`}>
-                  {getSentimentEmoji(journal.sentiment)}
-                </span>
-              </div>
-              
-              <p className="journal-content">{journal.content}</p>
-              
-              <div className="journal-footer">
-                <div className="journal-date">
-                  {new Date(journal.date).toLocaleString()}
+            journals.map(journal => (
+              <div key={journal.id} className="journal-card">
+                <div className="journal-header">
+                  <h3>{journal.title}</h3>
+                  <span className={`sentiment ${journal.sentiment}`}>
+                    {getSentimentEmoji(journal.sentiment)}
+                  </span>
                 </div>
-                <div className="journal-actions">
-                  <button 
-                    onClick={() => setEditingId(journal._id)}
-                    className="btn-edit"
-                  >
-                    Edit
-                  </button>
-                  <button 
-                    onClick={() => handleDelete(journal._id)}
-                    className="btn-delete"
-                  >
-                    Delete
-                  </button>
+                <p className="journal-content">{journal.content}</p>
+                <div className="journal-footer">
+                  <div className="journal-date">
+                    {new Date(journal.date).toLocaleDateString()}
+                  </div>
+                  <div className="journal-actions">
+                    <button
+                      className="btn-edit"
+                      onClick={() => setEditingJournal(journal)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="btn-delete"
+                      onClick={() => handleDelete(journal.id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               </div>
-            </>
+            ))
           )}
         </div>
-      ))}
+      )}
     </div>
   );
 };
@@ -107,7 +132,7 @@ function getSentimentEmoji(sentiment) {
     HAPPY: '😊',
     SAD: '😢',
     ANGRY: '😠',
-    ANXIOUS: '😰'
+    ANXIOUS: '😰',
   };
   return emojis[sentiment] || '';
 }

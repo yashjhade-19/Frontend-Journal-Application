@@ -1,3 +1,4 @@
+/* Login Page - Refined */
 .login-page {
   min-height: 100vh;
   display: flex;
@@ -11,37 +12,40 @@
   width: 100%;
   max-width: 480px;
   background-color: white;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 40px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .login-header {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 32px;
 }
 
 .login-header h2 {
-  font-size: 28px;
-  color: #333;
+  font-size: 24px;
+  color: #1a1a1a;
+  font-weight: 600;
+  margin-bottom: 8px;
 }
 
 .login-form {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .login-divider {
   position: relative;
   text-align: center;
-  margin: 25px 0;
+  margin: 24px 0;
 }
 
 .login-divider span {
   position: relative;
-  padding: 0 10px;
+  padding: 0 12px;
   background: white;
   z-index: 1;
-  color: #777;
+  color: #666;
+  font-size: 14px;
 }
 
 .login-divider::before {
@@ -51,7 +55,7 @@
   left: 0;
   right: 0;
   height: 1px;
-  background: #eee;
+  background: #e0e0e0;
   transform: translateY(-50%);
   z-index: 0;
 }
@@ -62,18 +66,22 @@
   justify-content: center;
   width: 100%;
   background-color: white;
-  color: #757575;
-  border: 1px solid #ddd;
+  color: #444;
+  border: 1px solid #e0e0e0;
   padding: 10px;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
 .btn-google:hover {
-  background-color: #f9f9f9;
+  background-color: #f8f8f8;
+  border-color: #d0d0d0;
 }
 
 .google-icon {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   margin-right: 10px;
 }
 
@@ -81,13 +89,29 @@
   text-align: center;
   padding-top: 20px;
   border-top: 1px solid #eee;
+  margin-top: 20px;
+  font-size: 14px;
 }
 
 .login-footer a {
   color: #4361ee;
   text-decoration: none;
+  font-weight: 500;
 }
 
 .login-footer a:hover {
   text-decoration: underline;
+}
+
+
+utton[type="submit"] {
+    background: #4361ee;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: background 0.3s ease;
 }
