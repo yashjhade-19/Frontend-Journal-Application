@@ -80,6 +80,7 @@
 }
 .journal-card:nth-child(3n+4) {
   border-left-color: #fdffb6;
+  
 }
 .journal-card:nth-child(3n+5) {
   border-left-color: #ffd6a5;
