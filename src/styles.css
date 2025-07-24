@@ -10,6 +10,9 @@ body {
   line-height: 1.6;
   background-color: #f8f9fa;
   color: #333;
+
+  background-image: url('https://www.transparenttextures.com/patterns/white-wall-3.png');
+
 }
 
 .container {
@@ -97,4 +100,68 @@ body {
   height: 100vh;
   font-size: 1.5rem;
   color: #4361ee;
+}
+
+
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+  color: #264653;
+}
+
+/* ===== Header ===== */
+header {
+  background-color: #264653;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== Navigation Tabs ===== */
+.nav-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.nav-tabs button {
+  background-color: #2a9d8f;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.nav-tabs button:hover,
+.nav-tabs button.active {
+  background-color: #21867a;
+}
+
+/* ===== Main Content Area ===== */
+main {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+
+:root {
+  --primary-dark: #2D3142;       /* Deep Navy (Primary) */
+  --primary-medium: #4F5D75;     /* Steel Blue */
+  --primary-light: #BFC0C0;      /* Silver */
+  --accent: #EF8354;             /* Coral (Accent) */
+  --neutral-light: #F8F9FA;      /* Off-White */
+  --neutral-dark: #2E2E2E;       /* Dark Text */
+  --success: #43A047;            /* Green */
+  --warning: #FB8C00;            /* Amber */
+  --error: #E53935;              /* Red */
 }

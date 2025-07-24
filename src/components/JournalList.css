@@ -6,39 +6,91 @@
   padding: 20px;
   max-width: 900px;
   margin: 0 auto;
+  background-color: rgba(208, 240, 192, 0.3);
+  border-radius: 12px;
+  min-height: 100vh;
+}
+
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 24px;
+}
+
+.header-actions h1 {
+  color: #2E4D3D;
+  font-size: 28px;
+  margin: 0;
 }
 
 /* Add New Journal Button */
 .add-new {
-  background: linear-gradient(to right, #4caf50, #66bb6a);
+  background: linear-gradient(to right, #7CB342, #8BC34A);
   color: white;
   border: none;
-  padding: 12px 18px;
-  border-radius: 6px;
+  padding: 12px 24px;
+  border-radius: 8px;
   cursor: pointer;
-  margin-bottom: 24px;
-  align-self: flex-start;
   font-weight: 600;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  transition: background 0.3s ease;
+  box-shadow: 0 3px 8px rgba(124, 179, 66, 0.3);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
 }
 
 .add-new:hover {
-  background: linear-gradient(to right, #43a047, #5dbb60);
+  background: linear-gradient(to right, #689F38, #7CB342);
+  transform: translateY(-1px);
+  box-shadow: 0 5px 12px rgba(124, 179, 66, 0.4);
 }
 
-/* Journal Card Container */
+/* Journal Cards Container */
+.journals-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Alternate Card Colors */
 .journal-card {
-  background: #fdfdfd;
   padding: 24px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  background: white;
+  border-left: 5px solid;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Color variations for cards */
+.journal-card:nth-child(3n+1) {
+  border-left-color: #ffc6ff;
+}
+.journal-card:nth-child(3n+2) {
+  border-left-color: #bdb2ff;
+}
+.journal-card:nth-child(3n+3) {
+  border-left-color: #9bf6ff;
+}
+.journal-card:nth-child(3n+4) {
+  border-left-color: #fdffb6;
+}
+.journal-card:nth-child(3n+5) {
+  border-left-color: #ffd6a5;
+}
+.journal-card:nth-child(3n+6) {
+  border-left-color: #ffadad;
 }
 
 .journal-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 /* Header (Title + Emoji) */
@@ -47,30 +99,62 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+  gap: 15px;
 }
 
 .journal-header h3 {
   margin: 0;
-  color: #2e2e2e;
+  color: #2E4D3D;
   font-size: 22px;
+  font-weight: 600;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Sentiment Emoji */
 .sentiment {
-  font-size: 26px;
+  font-size: 28px;
+  min-width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-.sentiment.happy { color: #43a047; }
-.sentiment.sad { color: #1976d2; }
-.sentiment.angry { color: #e53935; }
-.sentiment.anxious { color: #fb8c00; }
+.sentiment.happy { 
+  color: #689F38; 
+  background: #F1F8E9; 
+}
+.sentiment.sad { 
+  color: #5D8CAE; 
+  background: #E3F2FD; 
+}
+.sentiment.angry { 
+  color: #E57373; 
+  background: #FFEBEE; 
+}
+.sentiment.anxious { 
+  color: #FFB74D; 
+  background: #FFF3E0; 
+}
 
 /* Content */
 .journal-content {
-  color: #4a4a4a;
+  color: #546E7A;
   line-height: 1.7;
   font-size: 16px;
   margin-bottom: 18px;
+  padding: 12px;
+  background: #FAFAFA;
+  border-radius: 8px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  font-family: inherit;
 }
 
 /* Footer */
@@ -79,49 +163,83 @@
   justify-content: space-between;
   align-items: center;
   padding-top: 16px;
-  border-top: 1px solid #e0e0e0;
-  font-size: 13px;
-  color: #757575;
+  border-top: 1px solid #E0E0E0;
+  font-size: 14px;
+  color: #78909C;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.journal-date {
+  font-weight: 500;
 }
 
 /* Action Buttons */
 .journal-actions {
   display: flex;
   gap: 12px;
+  flex-shrink: 0;
 }
 
 .btn-edit,
 .btn-delete {
-  background: none;
-  border: none;
   cursor: pointer;
   font-weight: 500;
   font-size: 14px;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  white-space: nowrap;
 }
 
 .btn-edit {
-  color: #1e88e5;
+  color: #5D8CAE;
+  background: #E3F2FD;
 }
 .btn-edit:hover {
-  color: #1565c0;
+  color: #3E6C8E;
+  background: #BBDEFB;
 }
 
 .btn-delete {
-  color: #e53935;
+  color: #E57373;
+  background: #FFEBEE;
 }
 .btn-delete:hover {
-  color: #b71c1c;
+  color: #E53935;
+  background: #FFCDD2;
 }
 
-/* Loading and Error States */
-.loading,
-.error {
-  text-align: center;
-  padding: 24px;
-  font-size: 16px;
+/* Responsive Design */
+@media (max-width: 768px) {
+  .journal-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .sentiment {
+    align-self: flex-start;
+  }
+  
+  .journal-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .journal-actions {
+    align-self: flex-end;
+  }
 }
 
-.error {
-  color: #d32f2f;
+@media (max-width: 480px) {
+  .header-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .journal-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
 }
