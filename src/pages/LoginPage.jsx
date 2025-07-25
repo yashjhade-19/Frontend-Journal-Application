@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { login, googleLogin, getGoogleAuthUrl } from '../services/api';
+import { login, getGoogleAuthUrl } from '../services/api';
 import './LoginPage.css';
 
 const LoginPage = () => {
@@ -14,58 +14,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const { login: authLogin } = useAuth();
 
- // Handle Google OAuth callback
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get('code');
-    const oauthError = urlParams.get('error');
-
-    if (oauthError) {
-      setError('Google login was cancelled or denied.');
-      return;
-    }
-
-    if (code) {
-      const handleGoogleAuth = async () => {
-        try {
-          setIsSubmitting(true);
-          const response = await googleLogin(code);
-          
-          // Debugging log
-          console.log('Google login response:', response.data);
-          
-          // Ensure consistent structure
-          const token = response.data.token;
-          const user = response.data.user;
-          
-          if (token && user) {
-            // Store token and user data
-            localStorage.setItem('journalToken', token);
-            localStorage.setItem('journalUser', JSON.stringify(user));
-            
-            // Update auth context
-            authLogin(token, user);
-            
-            // Navigate to home - IMPORTANT: use replace to prevent going back to login
-            navigate('/', { replace: true });
-          } else {
-            setError('Google authentication failed: Missing token or user data');
-          }
-          
-          // Clean the URL after successful login
-          window.history.replaceState({}, document.title, window.location.pathname);
-        } catch (err) {
-          setError('Google authentication failed. Please try again.');
-          console.error('Google login error:', err);
-        } finally {
-          setIsSubmitting(false);
-        }
-      };
-      
-      handleGoogleAuth();
-    }
-  }, [authLogin, navigate]);
-
+ 
   
   const handleChange = (e) => {
     const { name, value } = e.target;

@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
 import SignupPage from './pages/SignupPage';
+import AuthHandlerPage from './pages/AuthHandlerPage';
 
 const PrivateRoute = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuth();
@@ -31,6 +32,7 @@ function App() {
             }
           />
           <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="/auth-handler" element={<AuthHandlerPage />} />
         </Routes>
       </Router>
     </AuthProvider>

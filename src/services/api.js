@@ -73,11 +73,7 @@ export const getGoogleAuthUrl = async () => {
   return response.data; // Now returns a simple string
 };
 
-// Update Google login to handle consistent response
-export const googleLogin = async (code) => {
-  const response = await api.get(`/auth/google/callback?code=${code}`);
-  return response;
-};
+
 
 // ... existing imports and axios setup ...
 
