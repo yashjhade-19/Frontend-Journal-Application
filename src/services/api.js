@@ -7,6 +7,7 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+    withCredentials: true // ✅ Add this line
 });
 
 // Inject JWT token into Authorization header
