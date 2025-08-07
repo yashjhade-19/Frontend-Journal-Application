@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Axios instance with base configuration
 const api = axios.create({
-  baseURL: 'https://journal-application-production.up.railway.app',
+  baseURL: 'https://journal-app-h4z4.onrender.com',
   timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
