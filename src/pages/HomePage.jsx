@@ -33,7 +33,7 @@ const HomePage = () => {
             {/* Logo Section */}
             <div className="app-logo">
               <img
-                src="/logo.png"
+                src="/logo1.png"
                 alt="Journal App Logo"
                 className="logo-image"
               />

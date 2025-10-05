@@ -35,11 +35,11 @@
 .app-logo {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 5px;
 }
 
 .logo-image {
-  height: 40px;
+  height: 70px;
   width: auto;
   object-fit: contain;
 }
