@@ -1,3 +1,17 @@
+/* Logo Styles - ADD THESE AT THE TOP */
+.logo-section {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.login-logo {
+  height: 220px;
+  /* Adjust based on your logo size */
+  width: auto;
+  max-width: 180px;
+  object-fit: contain;
+}
+
 /* Login Page - Refined */
 .login-page {
   min-height: 100vh;
@@ -33,6 +47,87 @@
   margin-bottom: 24px;
 }
 
+/* Form group styles - ADD THESE */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #333;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.2s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #4361ee;
+}
+
+/* Button styles - ADD THESE */
+.btn {
+  width: 100%;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background: #4361ee;
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #3a56d4;
+}
+
+.btn-primary:disabled {
+  background: #a0a0a0;
+  cursor: not-allowed;
+}
+
+.btn-google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  color: #444;
+  border: 1px solid #e0e0e0;
+}
+
+.btn-google:hover:not(:disabled) {
+  background-color: #f8f8f8;
+  border-color: #d0d0d0;
+}
+
+.btn-google:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Error text - ADD THIS */
+.text-error {
+  color: #e53e3e;
+  margin-bottom: 16px;
+}
+
+.text-center {
+  text-align: center;
+}
+
 .login-divider {
   position: relative;
   text-align: center;
@@ -60,25 +155,6 @@
   z-index: 0;
 }
 
-.btn-google {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  background-color: white;
-  color: #444;
-  border: 1px solid #e0e0e0;
-  padding: 10px;
-  border-radius: 6px;
-  font-weight: 500;
-  transition: all 0.2s ease;
-}
-
-.btn-google:hover {
-  background-color: #f8f8f8;
-  border-color: #d0d0d0;
-}
-
 .google-icon {
   width: 18px;
   height: 18px;
@@ -101,17 +177,4 @@
 
 .login-footer a:hover {
   text-decoration: underline;
-}
-
-
-utton[type="submit"] {
-    background: #4361ee;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 500;
-    transition: background 0.3s ease;
 }

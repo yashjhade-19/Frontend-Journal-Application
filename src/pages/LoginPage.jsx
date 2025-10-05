@@ -71,6 +71,15 @@ const LoginPage = () => {
   return (
     <div className="login-page">
       <div className="login-container">
+        <div className="logo-section">
+          <img 
+            src="/logo.png" 
+            alt="Company Logo" 
+            className="login-logo"
+          />
+        </div>
+
+
         <div className="login-header">
           <h2>Sign in to your account</h2>
         </div>

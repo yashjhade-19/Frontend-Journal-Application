@@ -36,6 +36,13 @@ const SignupPage = () => {
   return (
     <div className="signup-page">
       <div className="signup-container">
+         <div className="logo-section">
+          <img 
+            src="/logo.png" 
+            alt="Company Logo" 
+            className="login-logo"
+          />
+        </div>
         <div className="signup-header">
           <h2>Create your account</h2>
         </div>

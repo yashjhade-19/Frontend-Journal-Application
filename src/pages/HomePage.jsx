@@ -10,9 +10,19 @@ const HomePage = () => {
   const { user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState('journals');
   const [refreshJournals, setRefreshJournals] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleJournalCreated = () => {
     setRefreshJournals(prev => !prev);
+  };
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleNavClick = (tab) => {
+    setActiveTab(tab);
+    setIsMobileMenuOpen(false);
   };
 
   return (
@@ -20,25 +30,44 @@ const HomePage = () => {
       <header className="app-header">
         <div className="container">
           <div className="header-content">
+            {/* Logo Section */}
             <div className="app-logo">
-              <h1>Journal App</h1>
+              <img
+                src="/logo.png"
+                alt="Journal App Logo"
+                className="logo-image"
+              />
+              <h1 className="logo-text">Journal App</h1>
             </div>
-            
-            <nav className="app-nav">
+
+            {/* Mobile Menu Button */}
+            <button
+              className={`mobile-menu-btn ${isMobileMenuOpen ? 'active' : ''}`}
+              onClick={toggleMobileMenu}
+              aria-label="Toggle menu"
+            >
+              <span className="hamburger-line"></span>
+              <span className="hamburger-line"></span>
+              <span className="hamburger-line"></span>
+            </button>
+
+            {/* Navigation */}
+            <nav className={`app-nav ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
               <button
-                onClick={() => setActiveTab('journals')}
+                onClick={() => handleNavClick('journals')}
                 className={`nav-btn ${activeTab === 'journals' ? 'active' : ''}`}
               >
                 Journals
               </button>
               <button
-                onClick={() => setActiveTab('settings')}
+                onClick={() => handleNavClick('settings')}
                 className={`nav-btn ${activeTab === 'settings' ? 'active' : ''}`}
               >
                 Settings
               </button>
             </nav>
-            
+
+            {/* Desktop Header Right */}
             <div className="header-right">
               <div className="weather-container">
                 <WeatherWidget />

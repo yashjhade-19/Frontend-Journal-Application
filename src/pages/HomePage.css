@@ -15,25 +15,76 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  border-bottom: 1px solid #f3f4f6; /* Softer border color */
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
 
 .header-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
+  position: relative;
 }
 
-/* Logo - More Professional */
-.app-logo h1 {
-  font-size: 24px;
+/* Updated Logo Section with Image */
+.app-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-image {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
+.logo-text {
+  font-size: 20px;
   font-weight: 700;
   color: #4f46e5;
   margin: 0;
   letter-spacing: -0.5px;
+}
+
+/* Mobile Menu Button */
+.mobile-menu-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 21px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1000;
+}
+
+.hamburger-line {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background-color: #4f46e5;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.hamburger-line.active:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+
+.hamburger-line.active:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-line.active:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
 }
 
 /* Navigation - Professional Style */
@@ -41,6 +92,7 @@
   display: flex;
   gap: 32px;
   margin-left: 48px;
+  transition: all 0.3s ease;
 }
 
 .nav-btn {
@@ -100,19 +152,6 @@
   font-size: 14px;
 }
 
-/* Avatar - Suggested Addition */
-.user-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background-color: #e0e7ff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #4f46e5;
-  font-weight: 600;
-}
-
 /* Logout Button - Professional */
 .btn-logout {
   background-color: #f3f4f6;
@@ -134,12 +173,6 @@
   color: #1f2937;
 }
 
-/* Suggested Icon for Logout */
-.btn-logout svg {
-  width: 14px;
-  height: 14px;
-}
-
 /* Main Content - Professional */
 .app-main {
   flex: 1;
@@ -151,4 +184,159 @@
 
 .main-content {
   padding: 16px 24px;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+  }
+
+  .header-content {
+    flex-wrap: wrap;
+  }
+
+  /* Mobile Menu Button */
+  .mobile-menu-btn {
+    display: flex;
+  }
+
+  /* Logo adjustments for mobile */
+  .app-logo {
+    gap: 8px;
+  }
+
+  .logo-image {
+    height: 32px;
+  }
+
+  .logo-text {
+    font-size: 18px;
+  }
+
+  /* Navigation for mobile */
+  .app-nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    flex-direction: column;
+    gap: 0;
+    margin-left: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-top: 1px solid #f3f4f6;
+    transform: translateY(-10px);
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .app-nav.mobile-open {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .nav-btn {
+    padding: 16px 24px;
+    border-bottom: 1px solid #f3f4f6;
+    text-align: left;
+    font-size: 16px;
+  }
+
+  .nav-btn:last-child {
+    border-bottom: none;
+  }
+
+  .nav-btn.active::after {
+    left: 16px;
+    right: 16px;
+  }
+
+  /* Header right section for mobile */
+  .header-right {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-left: 1px solid #f3f4f6;
+    border-bottom: 1px solid #f3f4f6;
+    border-radius: 0 0 0 8px;
+    transform: translateY(-10px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .header-right.mobile-open {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .weather-container {
+    margin-right: 0;
+    margin-bottom: 8px;
+  }
+
+  .user-info {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  /* Main content adjustments */
+  .app-main {
+    padding: 20px 0;
+  }
+
+  .main-content {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-logo {
+    gap: 6px;
+  }
+
+  .logo-image {
+    height: 28px;
+  }
+
+  .logo-text {
+    font-size: 16px;
+  }
+
+  .container {
+    padding: 0 12px;
+  }
+
+  .main-content {
+    padding: 12px;
+  }
+
+  .username {
+    font-size: 13px;
+  }
+
+  .btn-logout {
+    padding: 4px 12px;
+    font-size: 13px;
+  }
+}
+
+/* Small screen adjustments */
+@media (max-width: 360px) {
+  .logo-text {
+    font-size: 14px;
+  }
+
+  .app-logo {
+    gap: 4px;
+  }
 }
