@@ -4,13 +4,13 @@ import './JournalForm.css';
 
 const JournalForm = ({ journal, onSuccess, onCancel }) => {
   const isEditMode = !!journal?.id;
-  
+
   const [formData, setFormData] = useState({
     title: '',
     content: '',
     sentiment: 'HAPPY'
   });
-  
+
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -28,38 +28,42 @@ const JournalForm = ({ journal, onSuccess, onCancel }) => {
     setError('');
   }, [journal, isEditMode]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    setIsSubmitting(true);
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError('');
+  setIsSubmitting(true);
 
-    try {
-      if (!formData.title || !formData.content) {
-        throw new Error('Title and content are required');
-      }
-      
-      if (isEditMode) {
-        await journalAPI.update(journal.id, formData);
-      } else {
-        await journalAPI.create(formData);
-      }
-      
-      onSuccess?.();
-    } catch (err) {
-      const errorMessage = err.response?.data?.message || 
-                          err.message || 
-                          'An error occurred. Please try again.';
-      setError(errorMessage);
-    } finally {
-      setIsSubmitting(false);
+  try {
+    if (!formData.title || !formData.content) {
+      throw new Error('Title and content are required');
     }
-  };
+
+    let response;
+    if (isEditMode) {
+      response = await journalAPI.update(journal.id, formData);
+    } else {
+      response = await journalAPI.create(formData);
+      // Reset form after successful creation
+      setFormData({ title: '', content: '', sentiment: 'HAPPY' });
+    }
+
+    const journalData = response.data || response;
+    onSuccess?.(journalData);
+  } catch (err) {
+    const errorMessage = err.response?.data?.message ||
+      err.message ||
+      'An error occurred. Please try again.';
+    setError(errorMessage);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   return (
     <div className="journal-form">
       <h2>{isEditMode ? 'Edit Journal Entry' : 'Create New Journal Entry'}</h2>
       {error && <div className="error-message">{error}</div>}
-      
+
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Title *</label>
@@ -70,7 +74,7 @@ const JournalForm = ({ journal, onSuccess, onCancel }) => {
             required
           />
         </div>
-        
+
         <div className="form-group">
           <label>Content *</label>
           <textarea
@@ -79,7 +83,7 @@ const JournalForm = ({ journal, onSuccess, onCancel }) => {
             required
           />
         </div>
-        
+
         <div className="form-group">
           <label>Mood</label>
           <select
@@ -92,22 +96,21 @@ const JournalForm = ({ journal, onSuccess, onCancel }) => {
             <option value="ANXIOUS">Anxious 😰</option>
           </select>
         </div>
-        
+
         <div className="form-actions">
-          <button 
-            type="button" 
+          <button
+            type="button"
             className="btn-cancel"
             onClick={onCancel}
             disabled={isSubmitting}
           >
             Cancel
           </button>
-          
-          <button 
-          className="create-journal-btn"
-            type="submit" 
+
+          <button
+            className="create-journal-btn"
+            type="submit"
             disabled={isSubmitting}
-           
           >
             {isSubmitting ? (
               <span>Saving...</span>

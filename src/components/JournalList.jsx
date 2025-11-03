@@ -3,7 +3,7 @@ import { journalAPI } from '../services/api';
 import JournalForm from './JournalForm';
 import './JournalList.css';
 
-const JournalList = () => {
+const JournalList = ({ refresh }) => {
   const [journals, setJournals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -14,6 +14,7 @@ const JournalList = () => {
       setLoading(true);
       setError('');
       const data = await journalAPI.getAll();
+      console.log('Fetched journals:', data); // Debug log
       setJournals(data);
     } catch (err) {
       setError('Failed to load journals. Please try again later.');
@@ -25,7 +26,7 @@ const JournalList = () => {
 
   useEffect(() => {
     fetchJournals();
-  }, []);
+  }, [refresh]);
 
   const handleDelete = async (id) => {
     if (!id) return;
@@ -33,19 +34,40 @@ const JournalList = () => {
     if (window.confirm('Are you sure you want to delete this journal entry?')) {
       try {
         await journalAPI.delete(id);
-        fetchJournals();
+        // Update local state immediately
+        setJournals(prev => prev.filter(journal => journal.id !== id));
       } catch (err) {
         const errorMessage = err.response?.data?.message || 
                             'Failed to delete journal. Please try again.';
         setError(errorMessage);
         console.error('Delete error:', err);
+        // If delete fails, refetch to ensure sync
+        fetchJournals();
       }
     }
   };
 
-  const handleFormSuccess = () => {
+  const handleFormSuccess = (journalData) => {
+    console.log('Form success with data:', journalData); // Debug log
+    
     setEditingJournal(null);
-    fetchJournals();
+    
+    if (journalData && journalData.id) {
+      // We have valid journal data
+      if (editingJournal && editingJournal.id !== 'new') {
+        // Editing existing journal
+        setJournals(prev => prev.map(j => 
+          j.id === journalData.id ? { ...j, ...journalData } : j
+        ));
+      } else {
+        // Creating new journal
+        setJournals(prev => [journalData, ...prev]);
+      }
+    } else {
+      // No valid data received, fallback to refetch
+      console.log('No valid journal data received, refetching...');
+      fetchJournals();
+    }
   };
 
   return (

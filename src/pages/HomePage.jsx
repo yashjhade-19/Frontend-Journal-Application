@@ -88,8 +88,8 @@ const HomePage = () => {
           <div className="main-content">
             {activeTab === 'journals' ? (
               <>
-                <JournalForm onJournalCreated={handleJournalCreated} />
-                <JournalList key={refreshJournals} />
+                <JournalForm onSuccess={handleJournalCreated} />
+                <JournalList refresh={refreshJournals} />
               </>
             ) : (
               <SettingsPanel user={user} />
